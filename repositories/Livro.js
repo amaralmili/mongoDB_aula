@@ -6,8 +6,21 @@ class Livro {
     this.colecao = getDatabase("biblioteca").collection("livros"); // Conecta à coleção "livros" do banco "biblioteca"
   }
 
-  async cadastrarLivro(livro) {
+  async cadastrarLivro(
+    titulo,
+    autor,
+    isbn,
+    exemplares_total,
+    exemplares_disponiveis,
+  ) {
     try {
+      const livro = {
+        titulo,
+        autor,
+        isbn,
+        exemplares_total,
+        exemplares_disponiveis,
+      };
       const resultado = await this.colecao.insertOne(livro);
       console.log(`livro Cadastrado com sucesso`);
       return resultado;

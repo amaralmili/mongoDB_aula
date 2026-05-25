@@ -6,19 +6,19 @@ class Emprestimo {
     this.colecao = getDatabase("biblioteca").collection("emprestimos");
   }
 
-  async registrarEmprestimo(idLivro, nomeUsuario) {
+  async registrarEmprestimo(livro_id, usuario_nome, data_devolucao_prevista) {
     try {
       const novoEmprestimo = {
-        idLivro: new ObjectId(idLivro),
-        usuario: nomeUsuario,
-        dataEmprestimo: new Date(),
-        dataDevolucao: null,
-        devolvido: false,
+        livro_id: new ObjectId(livro_id),
+        usuario_nome,
+        data_emprestimo: new Date(),
+        data_devolucao_prevista,
+        status: "emprestado",
       };
 
       const resultado = await this.colecao.insertOne(novoEmprestimo);
       console.log(
-        `emprestimo para o usuário ${nomeUsuario}, registrado com sucesso`,
+        `emprestimo para o usuário ${usuario_nome}, registrado com sucesso`,
       );
       return resultado;
     } catch (error) {
@@ -30,7 +30,7 @@ class Emprestimo {
   async listarEmprestimosAtivos() {
     try {
       const emprestimos = await this.colecao
-        .find({ devolvido: false })
+        .find({ status: "emprestado" })
         .toArray();
       return emprestimos;
     } catch (error) {
@@ -45,8 +45,8 @@ class Emprestimo {
         { _id: new ObjectId(idEmprestimo) },
         {
           $set: {
-            dataDevolucao: new Date(),
-            devolvido: true,
+            data_devolucao_efetiva: new Date(),
+            status: "devolvido",
           },
         },
       );
