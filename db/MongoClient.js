@@ -18,4 +18,4 @@ function getDatabase(nomeBanco) {
   return client.db(nomeBanco);
 }
 
-module.exports = { conectar, getDatabase };
+module.exports = { conectar, getDatabase, client };
